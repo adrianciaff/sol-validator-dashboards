@@ -1,0 +1,40 @@
+# Claude Code Configuration & Logs
+.claude/
+.claude.json
+
+# Internal Documentation (not for public)
+docs/.internal/
+
+# Project Templates (local preferences only)
+templates/
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Docker platform specific builds
+.docker/
+
+# Google Cloud Build artifacts
+cloudbuild.yaml.bak 

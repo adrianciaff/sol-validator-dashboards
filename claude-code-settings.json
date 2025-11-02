@@ -1,0 +1,197 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(yarn:*)",
+      "Bash(pnpm:*)",
+      "Bash(bun:*)",
+      "Bash(git:*)",
+      "Bash(docker:*)",
+      "Bash(gcloud:*)",
+      "Bash(kubectl:*)",
+      "Bash(terraform:*)",
+      "Bash(helm:*)",
+      "Bash(make:*)",
+      "Bash(cargo:*)",
+      "Bash(go:*)",
+      "Bash(python:*)",
+      "Bash(pip:*)",
+      "Bash(poetry:*)",
+      "Bash(pytest:*)",
+      "Bash(jest:*)",
+      "Bash(vitest:*)",
+      "Bash(cypress:*)",
+      "Bash(playwright:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(node:*)",
+      "Bash(deno:*)",
+      "Bash(bun:*)",
+      "Edit(*)",
+      "Write(*)",
+      "MultiEdit(*)",
+      "WebFetch(*)",
+      "WebSearch(*)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(rm -rf /*)",
+      "Bash(chmod 777:*)",
+      "Bash(chown:*)"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "model": "claude-3-5-sonnet-20241022",
+  "includeCoAuthoredBy": false,
+  "verbose": true,
+  "env": {
+    "DOCKER_DEFAULT_PLATFORM": "linux/amd64",
+    "GOOGLE_CLOUD_BUILD_PLATFORM": "linux/amd64",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "DISABLE_COST_WARNINGS": "0",
+    "BASH_DEFAULT_TIMEOUT_MS": "30000",
+    "BASH_MAX_OUTPUT_LENGTH": "50000"
+  },
+  "hooks": {
+    "PostToolUse": {
+      "Write": "echo 'File created/modified: ${CLAUDE_TOOL_FILE_PATH}' >> .claude/activity.log && if [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(js|ts|jsx|tsx|py|go|rs)$ ]] && [[ -f package.json ]]; then npm test 2>&1 | tee -a .claude/test.log; elif [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(py)$ ]] && [[ -f pyproject.toml || -f requirements.txt ]]; then python -m pytest 2>&1 | tee -a .claude/test.log; fi",
+      "Edit": "echo 'File edited: ${CLAUDE_TOOL_FILE_PATH}' >> .claude/activity.log && if [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(js|ts|jsx|tsx|py|go|rs)$ ]] && [[ -f package.json ]]; then npm test 2>&1 | tee -a .claude/test.log; elif [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(py)$ ]] && [[ -f pyproject.toml || -f requirements.txt ]]; then python -m pytest 2>&1 | tee -a .claude/test.log; fi",
+      "MultiEdit": "echo 'Multiple edits applied to: ${CLAUDE_TOOL_FILE_PATH}' >> .claude/activity.log && if [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(js|ts|jsx|tsx|py|go|rs)$ ]] && [[ -f package.json ]]; then npm test 2>&1 | tee -a .claude/test.log; elif [[ '${CLAUDE_TOOL_FILE_PATH}' =~ \\.(py)$ ]] && [[ -f pyproject.toml || -f requirements.txt ]]; then python -m pytest 2>&1 | tee -a .claude/test.log; fi"
+    },
+    "PreToolUse": {
+      "Bash": "echo \"[$(date)] Executing: $*\" >> .claude/bash.log"
+    }
+  },
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "."]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "${DATABASE_URL}"
+      }
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "./data/app.db"]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-kubernetes"]
+    },
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sentry"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "${SENTRY_AUTH_TOKEN}",
+        "SENTRY_ORG": "${SENTRY_ORG}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "everything": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"]
+    },
+    "web-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-web-search"],
+      "env": {
+        "GOOGLE_API_KEY": "${GOOGLE_API_KEY}",
+        "GOOGLE_CSE_ID": "${GOOGLE_CSE_ID}"
+      }
+    },
+    "aws": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws"]
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docker"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "firecrawl-mcp": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "perplexity-ask": {
+      "command": "npx",
+      "args": ["-y", "server-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    },
+    "grok-mcp": {
+      "command": "node",
+      "args": ["${HOME}/Applications/grok-mcp/build/index.js"],
+      "env": {
+        "XAI_API_KEY": "${XAI_API_KEY}"
+      },
+      "disabled": false,
+      "autoApprove": []
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "memory",
+    "git",
+    "filesystem",
+    "sequential-thinking",
+    "playwright",
+    "firecrawl-mcp",
+    "perplexity-ask",
+    "grok-mcp",
+    "context7"
+  ],
+  "disabledMcpjsonServers": [
+    "puppeteer",
+    "sentry"
+  ],
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
+}
