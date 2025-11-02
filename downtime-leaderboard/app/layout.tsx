@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Validator Downtime Leaderboard',
+  title: 'SOL Validator Downtime Leaderboard',
   description: 'Real-time validator downtime incidents tracking',
 }
 

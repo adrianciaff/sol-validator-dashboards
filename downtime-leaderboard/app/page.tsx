@@ -60,7 +60,7 @@ export default async function Home() {
   return (
     <div className="container">
       <header>
-        <h1>Validator Downtime Leaderboard</h1>
+        <h1>SOL Validator Downtime Leaderboard</h1>
         <div className="metadata">
           <div className="metadata-item">
             <span className="metadata-label">Total Validators</span>
